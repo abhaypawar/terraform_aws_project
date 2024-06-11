@@ -1,0 +1,102 @@
+Part 1: Terraform Infrastructure as Code Project
+
+Objective: Use Terraform to set up a web application infrastructure on AWS.
+
+Components:
+
+    VPC (Virtual Private Cloud): A virtual network dedicated to your AWS account, allowing you to launch AWS resources in a logically isolated section.
+    Subnets: Two subnets (public and private) within the VPC.
+    Internet Gateway: Allows communication between the VPC and the internet.
+    Route Table: Directs traffic within the VPC.
+    Security Group: Defines firewall rules for the EC2 instances.
+    EC2 Instance: A virtual server in the AWS cloud running a web server.
+    S3 Bucket: Object storage service used for storing static files.
+    RDS Instance: Managed relational database service for MySQL.
+    DB Subnet Group: Specifies the subnets for the RDS instance.
+
+Detailed Steps:
+
+    Provider Configuration:
+        Configure the AWS provider to specify the AWS region.
+
+    VPC and Subnets:
+        Create a VPC with a specified CIDR block.
+        Create a public subnet within the VPC for web servers.
+        Create a private subnet for the RDS instance.
+
+    Internet Gateway and Route Table:
+        Create an Internet Gateway and attach it to the VPC.
+        Create a route table with a route to direct traffic to the Internet Gateway.
+        Associate the public subnet with the route table to allow internet access.
+
+    Security Group:
+        Create a security group with rules to allow HTTP traffic (port 80) and all outbound traffic.
+
+    EC2 Instance:
+        Launch an EC2 instance using a specified Amazon Linux 2 AMI and instance type.
+        Attach the security group and public subnet to the instance.
+        Use user data to install and start the Apache web server automatically and create a simple "Hello World" webpage.
+
+    S3 Bucket:
+        Create an S3 bucket with public read access and configure it to host a static website.
+
+    RDS Instance and DB Subnet Group:
+        Create an RDS instance with MySQL engine, allocating storage and setting up credentials.
+        Create a DB subnet group including the private subnet for the RDS instance.
+
+Running Terraform:
+
+    Initialize Terraform:
+        terraform init: Prepares the working directory for use with Terraform.
+
+    Apply Terraform Configuration:
+        terraform apply: Provisions the resources defined in the main.tf file.
+
+Part 2: Automate Server Configuration with Ansible
+
+Objective: Use Ansible to automate the configuration of the web server on the EC2 instance.
+
+Components:
+
+    Ansible Playbook: Defines tasks to be executed on the remote server.
+    Hosts Inventory: Lists the EC2 instance IP address to be managed by Ansible.
+
+Detailed Steps:
+
+    Hosts Inventory:
+        Create a hosts file with the IP address of the EC2 instance.
+
+    Ansible Playbook:
+        Create a site.yml playbook to define the tasks for server configuration:
+            Ensure Apache web server is installed.
+            Ensure Apache is running and enabled to start on boot.
+            Create a simple HTML file to serve as the webpage.
+
+Running Ansible:
+
+    Run the Ansible Playbook:
+        ansible-playbook -i hosts site.yml --private-key path-to-your-ssh-key.pem: Executes the playbook on the EC2 instance using the specified SSH key for access.
+
+Project Flow Summary
+
+    Provision Infrastructure with Terraform:
+        Set up AWS resources including VPC, subnets, Internet Gateway, route tables, security groups, EC2 instance, S3 bucket, and RDS instance.
+        Terraform scripts (main.tf) automate the creation of these resources.
+
+    Automate Configuration with Ansible:
+        Define an inventory (hosts) and playbook (site.yml) to automate the setup of the web server on the EC2 instance.
+        Ansible ensures the web server is installed, running, and serving a simple webpage.
+
+Execution Flow
+
+    Clone the Repository:
+        Download the project files from GitHub.
+
+    Run Terraform:
+        Initialize and apply Terraform configuration to set up the infrastructure.
+
+    Update Ansible Inventory:
+        Add the public IP address of the EC2 instance to the hosts file.
+
+    Run Ansible Playbook:
+        Execute the playbook to configure the web server on the EC2 instance.
